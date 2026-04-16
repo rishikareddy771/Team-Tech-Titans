@@ -1,3 +1,42 @@
+# 🚀 MONEY TALKS
+
+> CUTE BUDGET TRACKER
+
+---
+
+## 📌 Problem Statement
+
+[Most students managing money on their own for the first time run dry before the month ends. The budgeting apps that exist were built for salaried adults and do not map well to how students actually spend: canteen meals, auto fares, last-minute stationery, weekend plans. They end up guessing where the money went.]
+
+---
+
+## 💡 Solution
+Money Talks — A budgeting website designed specifically for students
+Helps students:
+Track expenses easily
+Set monthly budget
+See where money goes
+Avoid going broke
+Make smarter spending decisions
+
+
+---
+
+## 🛠️ Tech Stack
+
+* Frontend: (React / HTML / CSS / etc.)
+* Backend:local storage
+* Tools: (Vite, GitHub, etc.)
+
+---
+
+## ✨ Features
+
+* ✅ days until broke
+* ✅ penguine chatbot
+* ✅ savings goal
+
+---
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
