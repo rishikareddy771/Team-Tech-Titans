@@ -147,6 +147,7 @@ export const calculateBudgetInsights = (budgetData, categoryConfig = CATEGORY_CO
           amount: toAmount(entry.amount),
           date: entry.date || getTodayDateValue(),
           note: entry.note || '',
+          customCategoryName: entry.customCategoryName,
         }))
         .sort((a, b) => new Date(b.date) - new Date(a.date))
     : []
@@ -247,6 +248,18 @@ export const getPeriodBreakdown = (insights, period) => {
         ? insights.monthlyTotal
         : insights.totalSpent
 
+  // Get entries for the selected period
+  const allEntries = insights.categories.flatMap((cat) => cat.recentEntries)
+  const periodEntries = allEntries
+    .filter((entry) => {
+      if (period === 'all') return true
+      const range = getRangeForPeriod(period)
+      if (!range) return true
+      const entryDate = new Date(entry.date)
+      return entryDate >= range.start && entryDate <= range.end
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+
   const categories = insights.categories.map((category) => {
     const value =
       period === 'week'
@@ -265,6 +278,7 @@ export const getPeriodBreakdown = (insights, period) => {
   return {
     total,
     categories,
+    entries: periodEntries,
     chartData: categories
       .filter((category) => category.value > 0)
       .map((category) => ({

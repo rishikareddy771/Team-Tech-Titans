@@ -8,6 +8,7 @@ import {
 function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState(getTodayDateValue())
+  const [customCategoryName, setCustomCategoryName] = useState('')
 
   const handleAddExpense = () => {
     if (!amount || Number(amount) <= 0) {
@@ -18,9 +19,11 @@ function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
       amount,
       categoryKey: category.key,
       date,
+      customCategoryName: category.key === 'others' ? customCategoryName : undefined,
     })
 
     setAmount('')
+    setCustomCategoryName('')
   }
 
   return (
@@ -45,7 +48,7 @@ function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
         </span>
       </div>
 
-      <div className="category-card__inputs category-card__inputs--triple">
+      <div className={`category-card__inputs ${category.key === 'others' ? 'category-card__inputs--quad' : 'category-card__inputs--triple'}`}>
         <label>
           <span>Log amount</span>
           <input
@@ -66,17 +69,29 @@ function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
           />
         </label>
 
-        <label>
-          <span>Set limit</span>
-          <input
-            min="0"
-            onChange={(event) =>
-              onCategoryLimitChange(category.key, event.target.value)
-            }
-            type="number"
-            value={category.limit}
-          />
-        </label>
+        {category.key === 'others' ? (
+          <label>
+            <span>Category name</span>
+            <input
+              onChange={(event) => setCustomCategoryName(event.target.value)}
+              placeholder="e.g., Entertainment"
+              type="text"
+              value={customCategoryName}
+            />
+          </label>
+        ) : (
+          <label>
+            <span>Set limit</span>
+            <input
+              min="0"
+              onChange={(event) =>
+                onCategoryLimitChange(category.key, event.target.value)
+              }
+              type="number"
+              value={category.limit}
+            />
+          </label>
+        )}
       </div>
 
       <div className="category-card__footer">
@@ -95,6 +110,11 @@ function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
           {category.recentEntries.map((entry) => (
             <span className="category-history__pill" key={entry.id}>
               {formatCurrency(entry.amount)} • {formatDateLabel(entry.date)}
+              {entry.customCategoryName && (
+                <span className="category-history__custom-name">
+                  ({entry.customCategoryName})
+                </span>
+              )}
             </span>
           ))}
         </div>

@@ -9,7 +9,9 @@ import {
 } from 'recharts'
 import {
   PERIOD_OPTIONS,
+  CATEGORY_CONFIG,
   formatCurrency,
+  formatDateLabel,
   getPeriodBreakdown,
 } from '../utils/calculations'
 
@@ -116,6 +118,33 @@ function Statistics({ insights }) {
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="stats-entries">
+          <p className="section-kicker" style={{ marginTop: '20px' }}>Recent Expenses 💳</p>
+          {breakdown.entries && breakdown.entries.length > 0 ? (
+            <div className="stats-entries__list">
+              {breakdown.entries.slice(0, 5).map((entry) => {
+                const category = CATEGORY_CONFIG.find(c => c.key === entry.categoryKey)
+                const displayName = entry.customCategoryName || category?.label || 'Unknown'
+                return (
+                  <div key={entry.id} className="stats-entry__item">
+                    <div className="stats-entry__info">
+                      <span className="stats-entry__category">
+                        {category?.icon} {displayName}
+                      </span>
+                      <small className="stats-entry__date">{formatDateLabel(entry.date)}</small>
+                    </div>
+                    <span className="stats-entry__amount">
+                      {formatCurrency(entry.amount)}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <p style={{ color: '#a0a8c0', fontSize: '0.9rem' }}>No expenses yet</p>
+          )}
         </div>
       </section>
     </div>

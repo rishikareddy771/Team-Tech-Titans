@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Home from './pages/Home'
 import Statistics from './pages/Statistics'
+import Calendar from './pages/Calendar'
 import {
   CATEGORY_CONFIG,
   calculateBudgetInsights,
@@ -150,7 +151,7 @@ function App() {
     }))
   }
 
-  const addExpenseEntry = ({ amount, categoryKey, date }) => {
+  const addExpenseEntry = ({ amount, categoryKey, date, customCategoryName }) => {
     setBudgetData((current) => ({
       ...current,
       entries: [
@@ -160,6 +161,7 @@ function App() {
           categoryKey,
           date,
           note: '',
+          customCategoryName,
         },
         ...current.entries,
       ],
@@ -202,6 +204,13 @@ function App() {
               >
                 Statistics
               </button>
+              <button
+                className={activePage === 'calendar' ? 'is-active' : ''}
+                onClick={() => setActivePage('calendar')}
+                type="button"
+              >
+                Calendar
+              </button>
             </nav>
 
             <button
@@ -227,8 +236,10 @@ function App() {
             onCategoryLimitChange={updateCategoryLimit}
             onSavingsGoalChange={updateSavingsGoal}
           />
-        ) : (
+        ) : activePage === 'statistics' ? (
           <Statistics insights={insights} />
+        ) : (
+          <Calendar budgetData={budgetData} />
         )}
       </main>
     </div>
