@@ -14,6 +14,55 @@ export const buildInitialBudgetState = () => ({
   updatedAt: new Date().toISOString(),
 })
 
+const PROFILE_STORAGE_KEY = 'money-talks-profiles'
+
+export const buildProfile = (name) => ({
+  id: `profile-${Date.now()}`,
+  name: String(name || '').trim(),
+  createdAt: new Date().toISOString(),
+  budgetData: buildInitialBudgetState(),
+})
+
+export const loadProfiles = () => {
+  try {
+    const rawValue = localStorage.getItem(PROFILE_STORAGE_KEY)
+    if (rawValue) {
+      const parsed = JSON.parse(rawValue)
+      if (Array.isArray(parsed)) {
+        return parsed
+          .filter((profile) => profile && typeof profile === 'object')
+          .map((profile) => ({
+            id: String(profile.id || '').trim(),
+            name: String(profile.name || '').trim(),
+            createdAt: profile.createdAt || new Date().toISOString(),
+            budgetData: normaliseState(profile.budgetData || profile),
+          }))
+          .filter((profile) => profile.id && profile.name)
+      }
+    }
+
+    const legacyValue = localStorage.getItem(STORAGE_KEY)
+    if (legacyValue) {
+      return [
+        {
+          id: 'profile-default',
+          name: 'Default',
+          createdAt: new Date().toISOString(),
+          budgetData: normaliseState(JSON.parse(legacyValue)),
+        },
+      ]
+    }
+
+    return []
+  } catch {
+    return []
+  }
+}
+
+export const saveProfiles = (profiles) => {
+  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles))
+}
+
 const normaliseState = (input) => {
   const fallback = buildInitialBudgetState()
 

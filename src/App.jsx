@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Home from './pages/Home'
 import Statistics from './pages/Statistics'
 import Calendar from './pages/Calendar'
+import ProfileSelection from './pages/ProfileSelection'
 import {
   CATEGORY_CONFIG,
   calculateBudgetInsights,
@@ -9,8 +10,9 @@ import {
 } from './utils/calculations'
 import {
   buildInitialBudgetState,
-  loadBudgetState,
-  saveBudgetState,
+  buildProfile,
+  loadProfiles,
+  saveProfiles,
 } from './utils/storage'
 import './App.css'
 
@@ -74,13 +76,21 @@ function PenguinAssistant({ insights }) {
       <div className={`penguin penguin--${mood.emotion}`}>
         <span className="penguin__heart penguin__heart--one">❤</span>
         <span className="penguin__heart penguin__heart--two">❤</span>
+
+        <div className="penguin__body">
+          <div className="penguin__head">
+            <div className="penguin__eye penguin__eye--left" />
+            <div className="penguin__eye penguin__eye--right" />
+            <div className="penguin__beak" />
+          </div>
+          <div className="penguin__belly" />
+          <div className="penguin__wing penguin__wing--left" />
+          <div className="penguin__wing penguin__wing--right" />
+          <div className="penguin__foot penguin__foot--left" />
+          <div className="penguin__foot penguin__foot--right" />
+        </div>
+
         <div className="penguin__shadow" />
-        <img 
-              
-              alt="Penguin mascot"
-               className="penguin__image"
-               src="/penguin-reference.png"
-/>
         <span className="penguin__tear penguin__tear--left" />
         <span className="penguin__tear penguin__tear--right" />
       </div>
@@ -90,18 +100,70 @@ function PenguinAssistant({ insights }) {
 
 function App() {
   const [activePage, setActivePage] = useState('home')
-  const [budgetData, setBudgetData] = useState(() => loadBudgetState())
+  const [profiles, setProfiles] = useState(() => loadProfiles())
+  const [activeProfileId, setActiveProfileId] = useState(null)
+  const [budgetData, setBudgetData] = useState(buildInitialBudgetState())
   const previousTone = useRef('')
   const previousOverLimitCount = useRef(0)
 
-  useEffect(() => {
-    saveBudgetState(budgetData)
-  }, [budgetData])
-
-  const insights = useMemo(
-    () => calculateBudgetInsights(budgetData, CATEGORY_CONFIG),
-    [budgetData],
+  const activeProfile = useMemo(
+    () => profiles.find((profile) => profile.id === activeProfileId) ?? null,
+    [profiles, activeProfileId],
   )
+
+  useEffect(() => {
+    saveProfiles(profiles)
+  }, [profiles])
+
+  useEffect(() => {
+    if (!activeProfileId) {
+      return
+    }
+
+    setProfiles((current) =>
+      current.map((profile) =>
+        profile.id === activeProfileId ? { ...profile, budgetData } : profile,
+      ),
+    )
+  }, [budgetData, activeProfileId])
+
+  const insights = useMemo(() => {
+    if (!activeProfile) {
+      return {
+        budget: 0,
+        savingsGoal: 0,
+        entries: [],
+        categories: CATEGORY_CONFIG.map((category) => ({
+          ...category,
+          spent: 0,
+          weekSpent: 0,
+          monthSpent: 0,
+          limit: 0,
+          remaining: 0,
+          percentOfBudget: 0,
+          percentOfLimit: 0,
+          isOverLimit: false,
+          recentEntries: [],
+        })),
+        totalSpent: 0,
+        weeklyTotal: 0,
+        monthlyTotal: 0,
+        remainingBudget: 0,
+        spentPercentage: 0,
+        daysActive: 0,
+        dailyBurn: 0,
+        daysUntilBroke: null,
+        savingsProgress: 0,
+        overLimitCategories: [],
+        highestSpentCategory: {},
+        focusCategory: {},
+        chartData: [],
+        recentEntries: [],
+      }
+    }
+
+    return calculateBudgetInsights(budgetData, CATEGORY_CONFIG)
+  }, [activeProfile, budgetData])
 
   const mood = getPenguinMood(insights)
 
@@ -173,6 +235,55 @@ function App() {
     setBudgetData(buildInitialBudgetState())
   }
 
+  const handleCreateProfile = (profileName) => {
+    const newProfile = buildProfile(profileName)
+    setProfiles((current) => [...current, newProfile])
+    setActiveProfileId(newProfile.id)
+    setBudgetData(newProfile.budgetData)
+  }
+
+  const handleSelectProfile = (profileId) => {
+    const selectedProfile = profiles.find((profile) => profile.id === profileId)
+    if (!selectedProfile) {
+      return
+    }
+
+    setActiveProfileId(profileId)
+    setBudgetData(selectedProfile.budgetData)
+  }
+
+  const handleDeleteProfile = (profileId) => {
+    setProfiles((current) => current.filter((profile) => profile.id !== profileId))
+
+    if (activeProfileId === profileId) {
+      setActiveProfileId(null)
+      setBudgetData(buildInitialBudgetState())
+    }
+  }
+
+  const handleSwitchProfile = () => {
+    setActiveProfileId(null)
+    setBudgetData(buildInitialBudgetState())
+  }
+
+  if (!activeProfile) {
+    return (
+      <div className="app-shell">
+        <div className="app-shell__glow app-shell__glow--one" />
+        <div className="app-shell__glow app-shell__glow--two" />
+        <MoneyRain />
+        <main className="page-shell">
+          <ProfileSelection
+            profiles={profiles}
+            onCreateProfile={handleCreateProfile}
+            onSelectProfile={handleSelectProfile}
+            onDeleteProfile={handleDeleteProfile}
+          />
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="app-shell">
       <div className="app-shell__glow app-shell__glow--one" />
@@ -184,8 +295,8 @@ function App() {
           <p className="eyebrow">Cute Budget Tracker ✨</p>
           <h1>Money Talks</h1>
           <p className="topbar__subtitle">
-            Build your budget, track real spending patterns, and keep the month
-            from turning chaotic.
+            Profile: {activeProfile.name} — build your budget, track real spending
+            patterns, and keep the month from turning chaotic.
           </p>
 
           <div className="topbar__actions topbar__actions--left">
@@ -213,6 +324,13 @@ function App() {
               </button>
             </nav>
 
+            <button
+              className="ghost-button ghost-button--nav"
+              onClick={handleSwitchProfile}
+              type="button"
+            >
+              Switch profile
+            </button>
             <button
               className="ghost-button ghost-button--nav"
               onClick={resetAll}

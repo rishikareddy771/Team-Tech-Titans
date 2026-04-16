@@ -129,6 +129,104 @@
   box-shadow: 0 12px 24px rgba(30, 41, 71, 0.22);
 }
 
+.profile-shell {
+  display: grid;
+  min-height: calc(100vh - 120px);
+  padding: 20px 0 40px;
+}
+
+.profile-card {
+  display: grid;
+  gap: 28px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(29, 35, 55, 0.08);
+  box-shadow: 0 24px 60px rgba(25, 34, 63, 0.11);
+}
+
+.profile-card .topbar__main h1,
+.profile-card h1 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.profile-card .topbar__subtitle {
+  font-size: 0.95rem;
+  max-width: 700px;
+}
+
+.profile-card__form {
+  display: grid;
+  gap: 16px;
+  max-width: 520px;
+}
+
+.profile-card__form label {
+  color: #1a1f33;
+  font-weight: 700;
+}
+
+.profile-card__form input {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(27, 32, 51, 0.12);
+  outline: none;
+  font-size: 1rem;
+  color: #1a1f33;
+  background: #ffffff;
+}
+
+.profile-list__items {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 20px;
+  border-radius: 24px;
+  background: #f7f8fb;
+  border: 1px solid rgba(29, 35, 55, 0.08);
+}
+
+.profile-item__actions {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ghost-button--danger {
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(255, 81, 97, 0.08);
+  color: #d42d4b;
+  font-weight: 800;
+}
+
+.ghost-button--danger:hover {
+  background: rgba(255, 81, 97, 0.18);
+}
+
+.profile-item strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.profile-item small {
+  color: #7a8295;
+}
+
 .page-shell,
 .page-grid,
 .stats-layout,
@@ -723,18 +821,19 @@
   justify-self: end;
   position: relative;
   width: 300px;
-  min-height: 220px;
+  min-height: 260px;
+  padding-top: 16px;
   z-index: 1;
   pointer-events: none;
 }
 
 .penguin-stage__speech {
   position: absolute;
-  top: 8px;
-  right: 0;
-  width: 182px;
-  padding: 12px 14px;
-  border-radius: 16px 16px 16px 6px;
+  top: 4px;
+  right: 10px;
+  width: 178px;
+  padding: 14px 16px;
+  border-radius: 18px 18px 18px 10px;
   background: rgba(255, 255, 255, 0.96);
   color: #4f5a74;
   font-size: 0.82rem;
@@ -767,86 +866,83 @@
 .penguin {
   position: absolute;
   left: 0;
-  top: 82px;
-  width: 150px;
-  height: 160px;
+  top: 150px;
+  width: 90px;
+  height: 130px;
   animation: penguinBob 3s ease-in-out infinite;
 }
 
 .penguin__heart {
   position: absolute;
-  font-size: 32px;
+  font-size: 18px;
   color: #ff7cad;
-  opacity: 4;
+  opacity: 0;
+  animation: none;
 }
 
 .penguin__heart--one {
-  left: 10px;
-  top: -4px;
+  left: 8px;
+  top: -6px;
 }
 
 .penguin__heart--two {
   left: 24px;
-  top: 10px;
+  top: 2px;
 }
 
 .penguin--happy .penguin__heart {
-  opacity: 2;
-  animation: heartFloat 5s ease-in-out infinite;
+  opacity: 1;
+  animation: heartFloat 2.2s ease-in-out infinite;
 }
 
 .penguin--happy .penguin__heart--two {
-  animation-delay: 5s;
+  animation-delay: 0.5s;
+}
+
+.penguin__body {
+  position: absolute;
+  left: 18px;
+  top: 28px;
+  width: 48px;
+  height: 72px;
+  border-radius: 32px / 48px;
+  background: #101c34;
+  box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.05);
 }
 
 .penguin__head {
-  position: relative;
-  left: 34px;
-  top: 0;
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #232d42 0%, #111827 100%);
+  position: absolute;
+  left: 50%;
+  top: -18px;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 50px;
+  border-radius: 42% 42% 50% 50%;
+  background: #ffffff;
+  border: 3px solid #111827;
 }
 
-.penguin__hood {
-  position: absolute;
-  inset: -8px -8px 6px;
-  border-radius: 45px 45px 34px 34px;
-  background: transparent;
-  z-index: -1;
-}
-
-.penguin__glasses {
-  position: absolute;
-  left: 12px;
-  top: 18px;
-  width: 38px;
-  height: 14px;
-  border-radius: 999px;
-  background: #141820;
-  box-shadow:
-    -13px 0 0 #141820,
-    13px 0 0 #141820;
+.penguin__brow {
+  display: none;
 }
 
 .penguin__eye,
 .penguin__beak,
 .penguin__tear,
-.penguin__brow,
 .penguin__smile,
 .penguin__shadow {
   position: absolute;
 }
 
 .penguin__eye {
-  top: 22px;
-  width: 8px;
-  height: 10px;
+  position: absolute;
+  top: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 999px;
-  background: #dbe7ff;
-  transform-origin: center;
-  animation: blinkEye 4.5s infinite;
+  background: #000000;
+  border: 1px solid #333;
+  z-index: 3;
 }
 
 .penguin__eye::after {
@@ -854,47 +950,120 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 2px;
-  height: 2px;
+  width: 4px;
+  height: 4px;
   border-radius: 999px;
-  background: #182236;
+  background: #ffffff;
+  opacity: 0.95;
 }
 
 .penguin__eye--left {
-  left: 18px;
+  left: 4px;
 }
 
 .penguin__eye--right {
-  right: 18px;
+  right: 4px;
 }
 
 .penguin__beak {
   left: 50%;
-  top: 36px;
-  width: 16px;
-  height: 11px;
+  top: 28px;
+  width: 8px;
+  height: 6px;
   transform: translateX(-50%);
   clip-path: polygon(50% 100%, 0 0, 100% 0);
-  background: #ffb24a;
+  background: #ffce54;
+}
+
+.penguin__belly {
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  width: 20px;
+  height: 36px;
+  border-radius: 18px / 26px;
+  background: #f8fafc;
+}
+
+.penguin__wing {
+  position: absolute;
+  top: 44px;
+  width: 10px;
+  height: 22px;
+  border-radius: 16px;
+  background: #1e2a3f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transform-origin: top center;
+}
+
+.penguin__wing--left {
+  left: -4px;
+  transform: rotate(-14deg);
+  animation: wingFlapLeft 1.8s ease-in-out infinite;
+}
+
+.penguin__wing--right {
+  right: -4px;
+  transform: rotate(14deg);
+  animation: wingFlapRight 1.8s ease-in-out infinite;
+}
+
+.penguin__foot {
+  position: absolute;
+  bottom: -4px;
+  width: 8px;
+  height: 6px;
+  border-radius: 4px;
+  background: #ffce54;
+}
+
+.penguin__foot--left {
+  left: 17px;
+}
+
+.penguin__foot--right {
+  right: 17px;
 }
 
 .penguin__shadow {
-  left: 34px;
-  bottom: -2px;
-  width: 78px;
-  height: 14px;
+  left: 28px;
+  bottom: -6px;
+  width: 40px;
+  height: 6px;
   border-radius: 999px;
-  background: rgba(16, 19, 30, 0.12);
+  background: rgba(16, 19, 30, 0.18);
+  filter: blur(0.5px);
+}
+
+.penguin--angry .penguin__brow--left,
+.penguin--angry .penguin__brow--right {
+  top: 12px;
+}
+
+.penguin--angry .penguin__brow--left {
+  transform: rotate(-18deg);
+}
+
+.penguin--angry .penguin__brow--right {
+  transform: rotate(18deg);
+}
+
+.penguin--cry .penguin__eye {
+  top: 30px;
+  width: 5px;
+  height: 6px;
+}
+
+.penguin--cry .penguin__tear {
+  opacity: 1;
+}
+
+.penguin--waiting .penguin__eye {
+  top: 30px;
 }
 
 .penguin__image {
-  position: absolute;
-  left: 8px;
-  top: 0;
-  width: 132px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+  display: none;
 }
 
 .penguin__tear {
@@ -950,6 +1119,26 @@
   }
   50% {
     transform: translateY(-6px);
+  }
+}
+
+@keyframes wingFlapLeft {
+  0%,
+  100% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+}
+
+@keyframes wingFlapRight {
+  0%,
+  100% {
+    transform: rotate(12deg);
+  }
+  50% {
+    transform: rotate(20deg);
   }
 }
 
@@ -1038,11 +1227,16 @@
   .penguin-stage {
     justify-self: start;
     width: 100%;
-    min-height: 230px;
+    min-height: 250px;
   }
 
   .penguin-stage__speech {
     right: 12px;
+    top: 10px;
+  }
+
+  .penguin {
+    top: 136px;
   }
 }
 
