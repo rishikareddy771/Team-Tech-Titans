@@ -7,6 +7,7 @@ import {
   CATEGORY_CONFIG,
   calculateBudgetInsights,
   getPenguinMood,
+  toAmount,
 } from './utils/calculations'
 import {
   buildInitialBudgetState,
@@ -219,7 +220,7 @@ function App() {
       entries: [
         {
           id: `${categoryKey}-${Date.now()}`,
-          amount,
+          amount: toAmount(amount),
           categoryKey,
           date,
           note: '',

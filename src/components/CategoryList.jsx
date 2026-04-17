@@ -15,7 +15,7 @@ function CategoryList({
           <h2>Track every category with dates</h2>
         </div>
         <p className="panel__meta">
-          Set each limit, log dated expenses, and let the penguin judge softly.
+          Set each limit, log dated expenses, and let the owl judge softly.
         </p>
       </div>
 

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { formatCurrency, formatDateLabel, CATEGORY_CONFIG } from '../utils/calculations'
+import { formatCurrency, formatDateLabel, CATEGORY_CONFIG, toAmount, toLocalDateValue } from '../utils/calculations'
 
 function Calendar({ budgetData }) {
   const currentDate = new Date()
@@ -19,7 +19,7 @@ function Calendar({ budgetData }) {
           aggregated[date] = 0
           entriesByDate[date] = []
         }
-        aggregated[date] += entry.amount
+        aggregated[date] += toAmount(entry.amount)
         entriesByDate[date].push(entry)
       })
     }
@@ -35,7 +35,7 @@ function Calendar({ budgetData }) {
       if (!grouped[key]) {
         grouped[key] = { amount: 0, entries: [] }
       }
-      grouped[key].amount += entry.amount
+      grouped[key].amount += toAmount(entry.amount)
       grouped[key].entries.push(entry)
     })
     return grouped
@@ -54,7 +54,7 @@ function Calendar({ budgetData }) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
 
-      const dateString = date.toISOString().slice(0, 10)
+      const dateString = toLocalDateValue(date)
       const isCurrentMonth = date.getMonth() === displayMonth && date.getFullYear() === displayYear
       const isToday = date.toDateString() === currentDate.toDateString()
       const spent = expensesByDate.total[dateString] || 0

@@ -52,7 +52,23 @@ export const formatCurrency = (value) =>
     maximumFractionDigits: 0,
   }).format(toAmount(value))
 
-export const getTodayDateValue = () => new Date().toISOString().slice(0, 10)
+const padDatePart = (value) => String(value).padStart(2, '0')
+
+export const getTodayDateValue = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = padDatePart(now.getMonth() + 1)
+  const day = padDatePart(now.getDate())
+  return `${year}-${month}-${day}`
+}
+
+export const toLocalDateValue = (value) => {
+  const date = value instanceof Date ? value : new Date(value)
+  const year = date.getFullYear()
+  const month = padDatePart(date.getMonth() + 1)
+  const day = padDatePart(date.getDate())
+  return `${year}-${month}-${day}`
+}
 
 export const formatDateLabel = (value) => {
   if (!value) {
@@ -293,7 +309,7 @@ export const getPeriodBreakdown = (insights, period) => {
 
 export const getDaysUntilBrokeLabel = (insights) => {
   if (!insights.budget) {
-    return 'Set a budget first so the penguin can stop guessing and start calculating.'
+    return 'Set a budget first so the owl can stop guessing and start calculating.'
   }
 
   if (!insights.totalSpent) {
@@ -331,7 +347,7 @@ export const getPenguinMood = (insights) => {
     return {
       tone: 'sleepy',
       emotion: 'waiting',
-      headline: 'Penguin is waiting for the budget drop',
+      headline: 'Penny is waiting for the budget drop',
       message:
         'Give me a budget number and a few expenses. Right now I am just a cute auditor with no tea.',
     }
@@ -342,7 +358,7 @@ export const getPenguinMood = (insights) => {
       tone: 'danger',
       emotion: 'cry',
       headline: `${insights.overLimitCategories[0].icon} ${insights.overLimitCategories[0].label} crossed the limit`,
-      message: `${focusCopy.over} I am officially angry-crying in penguin.`,
+      message: `${focusCopy.over} I am officially angry-crying in owl.`,
     }
   }
 
@@ -359,7 +375,7 @@ export const getPenguinMood = (insights) => {
   return {
     tone: 'calm',
     emotion: 'happy',
-    headline: `${insights.focusCategory?.icon ?? '🐧'} Spending is under control`,
+    headline: `${insights.focusCategory?.icon ?? '🦉'} Spending is under control`,
     message: focusCopy.safe,
   }
 }

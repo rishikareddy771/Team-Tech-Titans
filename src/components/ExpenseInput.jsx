@@ -98,7 +98,7 @@ function ExpenseInput({ category, onCategoryLimitChange, onAddExpenseEntry }) {
         <small>
           {category.limit > 0
             ? `${formatCurrency(category.remaining)} left in this category`
-            : 'Add a limit to unlock angry penguin alerts'}
+            : 'Add a limit to unlock angry owl alerts'}
         </small>
         <button className="category-card__button" onClick={handleAddExpense} type="button">
           Add expense
